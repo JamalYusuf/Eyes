@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EYES • Accessibility</title>
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+
+    :root {
+      /* Dark theme only - permanent */
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #252525;
+      --text-primary: #e5e5e5;
+      --text-secondary: #a3a3a3;
+      --border: #333333;
+      --accent: #ff0000;
+      --accent-hover: #dc2626;
+      --accent-light: #3f1a1a;
+    }
+
+    body {
+      font-family: 'Inter', system_ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      width: 500px;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      overflow: hidden;
+    }
+
+    .font-display {
+      font-family: 'Space Grotesk', 'Inter', system_ui, sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    /* Utility classes (replacing Tailwind) */
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .items-baseline { align-items: baseline; }
+    .justify-between { justify-content: space-between; }
+    .justify-center { justify-content: center; }
+    .gap-1 { gap: 4px; }
+    .gap-1\.5 { gap: 6px; }
+    .gap-2 { gap: 8px; }
+    .gap-2\.5 { gap: 10px; }
+    .gap-3 { gap: 12px; }
+
+    .grid { display: grid; }
+    .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .px-4 { padding-left: 16px; padding-right: 16px; }
+    .py-1 { padding-top: 4px; padding-bottom: 4px; }
+    .py-2 { padding-top: 8px; padding-bottom: 8px; }
+    .py-3 { padding-top: 12px; padding-bottom: 12px; }
+    .py-4 { padding-top: 16px; padding-bottom: 16px; }
+    .p-3 { padding: 12px; }
+    .p-4 { padding: 16px; }
+    .pt-1 { padding-top: 4px; }
+
+    .mb-1 { margin-bottom: 4px; }
+    .mb-2 { margin-bottom: 8px; }
+    .mb-3 { margin-bottom: 12px; }
+    .mt-1 { margin-top: 4px; }
+    .mt-2 { margin-top: 8px; }
+    .mt-auto { margin-top: auto; }
+
+    .w-4 { width: 16px; }
+    .w-8 { width: 32px; }
+    .w-9 { width: 36px; }
+    .w-\[3px\] { width: 3px; }
+    .w-full { width: 100%; }
+
+    .h-6 { height: 24px; }
+    .h-8 { height: 32px; }
+    .h-9 { height: 36px; }
+
+    .min-h-screen { min-height: 100vh; }
+    .min-w-0 { min-width: 0; }
+    .flex-shrink-0 { flex-shrink: 0; }
+    .flex-1 { flex: 1 1 0%; }
+
+    .text-xs { font-size: 12px; line-height: 1rem; }
+    .text-sm { font-size: 14px; line-height: 1.25rem; }
+    .text-lg { font-size: 18px; line-height: 1.75rem; }
+
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .font-bold { font-weight: 700; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+    .uppercase { text-transform: uppercase; }
+    .tracking-wide { letter-spacing: 0.025em; }
+    .tracking-wider { letter-spacing: 0.05em; }
+    .tracking-widest { letter-spacing: 0.1em; }
+    .tracking-\[0\.16em\] { letter-spacing: 0.16em; }
+    .leading-none { line-height: 1; }
+
+    .text-center { text-align: center; }
+    .text-\[10px\] { font-size: 10px; line-height: 1rem; }
+
+    .border { border-width: 1px; border-style: solid; }
+    .border-b { border-bottom-width: 1px; border-bottom-style: solid; }
+    .border-t { border-top-width: 1px; border-top-style: solid; }
+    .border-\[var\(--border\)\] { border-color: var(--border); }
+    .border-\[var\(--accent\)\] { border-color: var(--accent); }
+
+    .bg-\[var\(--bg-primary\)\] { background-color: var(--bg-primary); }
+    .bg-\[var\(--bg-secondary\)\] { background-color: var(--bg-secondary); }
+    .bg-\[var\(--accent\)\] { background-color: var(--accent); }
+    .bg-\[var\(--accent-light\)\] { background-color: var(--accent-light); }
+
+    .text-\[var\(--text-primary\)\] { color: var(--text-primary); }
+    .text-\[var\(--text-secondary\)\] { color: var(--text-secondary); }
+    .text-\[var\(--accent\)\] { color: var(--accent); }
+    .text-white { color: white; }
+
+    .cursor-pointer { cursor: pointer; }
+    .select-none { user-select: none; }
+    .list-none { list-style: none; }
+
+    .transition-colors { transition: color 0.1s ease, background-color 0.1s ease, border-color 0.1s ease; }
+    .transition-all { transition: all 0.1s ease; }
+    .transition-transform { transition: transform 0.2s ease; }
+
+    .hover\:bg-\[var\(--bg-secondary\)\]:hover { background-color: var(--bg-secondary); }
+    .hover\:border-\[var\(--accent\)\]:hover { border-color: var(--accent); }
+    .hover\:text-\[var\(--accent\)\]:hover { color: var(--accent); }
+
+    .fixed { position: fixed; }
+    .left-0 { left: 0; }
+    .top-0 { top: 0; }
+    .bottom-0 { bottom: 0; }
+    .z-50 { z-index: 50; }
+
+    .overflow-hidden { overflow: hidden; }
+
+    .col-span-2 { grid-column: span 2 / span 2; }
+
+    .hidden { display: none; }
+
+    .space-y-1 > * + * { margin-top: 4px; }
+    .space-y-3 > * + * { margin-top: 12px; }
+
+    /* === SHARP & DECISIVE DESIGN (Dark only) === */
+    .sharp,
+    button,
+    input,
+    .mode-btn,
+    .demo-button,
+    .slider,
+    details,
+    summary,
+    #toast,
+    .status-dot {
+      border-radius: 0 !important;
+    }
+
+    /* Section Headers */
+    .section-header {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      font-family: 'Space Grotesk', 'Inter', system_ui, sans-serif;
+    }
+
+    /* Status Dot */
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background-color: #555555;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .status-dot.active {
+      background-color: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-light);
+    }
+
+    /* Mode Buttons */
+    .mode-btn {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      transition: all 0.1s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mode-btn:hover {
+      border-color: var(--accent);
+      background-color: var(--bg-secondary);
+      transform: translateY(-1px);
+    }
+
+    .mode-btn:active {
+      transform: translateY(0);
+    }
+
+    .mode-btn.active {
+      border-color: var(--accent);
+      background-color: var(--accent-light);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .mode-btn i {
+      transition: transform 0.2s ease;
+    }
+
+    .mode-btn:hover i {
+      transform: scale(1.1);
+    }
+
+    /* Custom Range Sliders */
+    .slider {
+      -webkit-appearance: none;
+      height: 3px;
+      background: var(--border);
+      outline: none;
+      transition: background 0.2s;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      background: var(--accent);
+      border: 2px solid var(--bg-primary);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      transition: all 0.1s ease;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: var(--accent);
+      border: 2px solid var(--bg-primary);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .slider:hover::-webkit-slider-thumb {
+      background: var(--accent-hover);
+      transform: scale(1.05);
+    }
+
+    .slider:focus {
+      outline: none;
+    }
+
+    .slider:focus::-webkit-slider-thumb {
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    /* Demo Buttons */
+    .demo-button {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.1s ease;
+    }
+
+    .demo-button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background-color: var(--bg-secondary);
+    }
+
+    .demo-button:active {
+      transform: translateY(1px);
+    }
+
+    /* Apply Globally Button */
+    #apply-all-btn {
+      background-color: var(--accent) !important;
+      border-color: var(--accent) !important;
+      color: white !important;
+    }
+
+    #apply-all-btn:hover {
+      background-color: var(--accent-hover) !important;
+      border-color: var(--accent-hover) !important;
+    }
+
+    /* Color Inputs */
+    input[type="color"] {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      padding: 1px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    input[type="color"]:hover {
+      border-color: var(--accent);
+    }
+
+    input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    input[type="color"]::-webkit-color-swatch {
+      border: none;
+    }
+
+    /* Toast */
+    #toast {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      border-left: 3px solid var(--accent);
+    }
+
+    /* Collapsible */
+    details summary {
+      list-style: none;
+    }
+
+    details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details[open] summary {
+      margin-bottom: 8px;
+    }
+
+    /* Focus States */
+    button:focus-visible,
+    input:focus-visible,
+    .mode-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    /* Left Redline Accent */
+    .fixed.left-0 {
+      background-color: var(--accent);
+    }
+
+    /* Checkbox */
+    input[type="checkbox"] {
+      accent-color: var(--accent);
+    }
+
+  
+  </style>
+</head>
+
+<body class="dark">
+
+  <!-- REDLINE Accent -->
+  <div class="fixed left-0 top-0 bottom-0 w-[3px] bg-[var(--accent)]"></div>
+
+  <main class="flex flex-col min-h-screen">
+
+    <!-- HEADER -->
+    <header class="border-b border-[var(--border)] bg-[var(--bg-secondary)]">
+      <div class="px-4 py-3 flex items-center">
+
+        <div class="flex items-center gap-3">
+
+          <div class="w-9 h-9 flex items-center justify-center bg-[var(--accent)] sharp">
+            <i class="fa-solid fa-eye text-white text-lg"></i>
+          </div>
+
+          <div>
+            <h1 class="text-lg font-bold tracking-tight leading-none font-display">
+              EYES
+            </h1>
+            <div class="text-[10px] uppercase tracking-[0.16em] text-[var(--text-secondary)] font-mono -mt-0.5">
+              MINIMAL • POWERFUL • <span style="color:red;"><strong>RED</strong></span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ACTIVE MODE / STATUS -->
+    <section class="px-4 py-3 border-b border-[var(--border)] bg-[var(--bg-secondary)]/50">
+      <div class="flex items-center justify-between gap-3">
+
+        <div class="flex items-center gap-3 min-w-0">
+          <div id="status-dot" class="status-dot sharp"></div>
+          <div>
+            <div class="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-mono mb-0.5">CURRENT STATUS</div>
+            <div id="status-text"
+                 class="font-mono font-semibold text-sm uppercase tracking-wide leading-none">
+              No Mode Active
+            </div>
+          </div>
+        </div>
+
+        <div id="current-mode-badge"
+             class="hidden px-3 py-1 bg-[var(--accent)] text-white text-[10px] font-mono uppercase tracking-wider flex-shrink-0 sharp">
+        </div>
+
+      </div>
+    </section>
+
+    <!-- QUICK MODES -->
+    <section class="px-4 py-4">
+
+      <div class="flex items-center justify-between mb-3">
+        <div class="section-header">Quick Modes</div>
+        <div class="text-[10px] text-[var(--text-secondary)]">One-click presets</div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2">
+
+        <button data-mode="dark" class="mode-btn demo-button p-3 flex flex-col items-center justify-center gap-1.5 text-center sharp">
+          <i class="fa-solid fa-moon text-xl text-[var(--accent)]"></i>
+          <div class="uppercase text-xs font-semibold tracking-wide">Dark</div>
+        </button>
+
+        <button data-mode="grayscale" class="mode-btn demo-button p-3 flex flex-col items-center justify-center gap-1.5 text-center sharp">
+          <i class="fa-solid fa-adjust text-xl text-[var(--accent)]"></i>
+          <div class="uppercase text-xs font-semibold tracking-wide">Grayscale</div>
+        </button>
+
+        <button data-mode="sepia" class="mode-btn demo-button p-3 flex flex-col items-center justify-center gap-1.5 text-center sharp">
+          <i class="fa-solid fa-camera-retro text-xl text-[var(--accent)]"></i>
+          <div class="uppercase text-xs font-semibold tracking-wide">Sepia</div>
+        </button>
+
+        <button data-mode="blue-light" class="mode-btn demo-button p-3 flex flex-col items-center justify-center gap-1.5 text-center sharp">
+          <i class="fa-solid fa-sun text-xl text-[var(--accent)]"></i>
+          <div class="uppercase text-xs font-semibold tracking-wide">Blue Light</div>
+        </button>
+
+        <button data-mode="high-contrast" class="mode-btn demo-button p-3 flex flex-col items-center justify-center gap-1.5 text-center col-span-2 sharp">
+          <i class="fa-solid fa-low-vision text-xl text-[var(--accent)]"></i>
+          <div class="uppercase text-xs font-semibold tracking-wide">High Contrast</div>
+        </button>
+
+      </div>
+
+      <div class="mt-2 text-center">
+        <p class="text-[10px] text-[var(--text-secondary)]">Click any mode to apply instantly</p>
+      </div>
+
+    </section>
+
+    <!-- ADJUSTMENTS -->
+    <section id="adjustments-panel" class="px-4 py-4 border-t border-[var(--border)]">
+
+      <div class="section-header mb-3 flex items-center gap-2">
+        <i class="fa-solid fa-sliders-h text-sm"></i>
+        <span>Fine-tune Adjustments</span>
+      </div>
+
+      <div class="space-y-3">
+
+        <div>
+          <div class="flex justify-between mb-1 text-xs items-baseline">
+            <label class="font-medium">Brightness</label>
+            <span id="brightness-value" class="font-mono text-[var(--accent)]">100%</span>
+          </div>
+          <input id="brightness-slider" class="slider w-full sharp" type="range" min="50" max="150" value="100">
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-1 text-xs items-baseline">
+            <label class="font-medium">Contrast</label>
+            <span id="contrast-value" class="font-mono text-[var(--accent)]">100%</span>
+          </div>
+          <input id="contrast-slider" class="slider w-full sharp" type="range" min="50" max="150" value="100">
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-1 text-xs items-baseline">
+            <label class="font-medium">Font Scale</label>
+            <span id="font-value" class="font-mono text-[var(--accent)]">100%</span>
+          </div>
+          <input id="font-slider" class="slider w-full sharp" type="range" min="0.7" max="2.0" step="0.05" value="1">
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-1 text-xs items-baseline">
+            <label class="font-medium">Line Height</label>
+            <span id="line-height-value" class="font-mono text-[var(--accent)]">1.55</span>
+          </div>
+          <input id="line-height-slider" class="slider w-full sharp" type="range" min="1" max="2.2" step="0.05" value="1.55">
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-1 text-xs items-baseline">
+            <label class="font-medium">Letter Spacing</label>
+            <span id="letter-spacing-value" class="font-mono text-[var(--accent)]">0 px</span>
+          </div>
+          <input id="letter-spacing-slider" class="slider w-full sharp" type="range" min="-1" max="3" step="0.1" value="0">
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- COLORS (Collapsible) -->
+    <section class="px-4 py-3 border-t border-[var(--border)]">
+
+      <details class="group">
+        <summary class="section-header mb-2 flex items-center justify-between cursor-pointer select-none list-none sharp">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-palette text-sm"></i>
+            <span>Custom Colors</span>
+            <span class="text-[10px] font-normal text-[var(--text-secondary)]">(advanced)</span>
+          </div>
+          <i class="fa-solid fa-chevron-down text-xs transition-transform group-open:rotate-180"></i>
+        </summary>
+
+        <div class="space-y-3 pt-1">
+
+          <div class="flex items-center justify-between text-xs">
+            <label class="flex items-center gap-2">
+              <i class="fa-solid fa-font w-3.5 text-[var(--text-secondary)]"></i>
+              <span>Text</span>
+            </label>
+            <input id="color-text" type="color" value="#e0e0e0" class="w-9 h-6 p-0.5 bg-transparent border border-[var(--border)] cursor-pointer sharp">
+          </div>
+
+          <div class="flex items-center justify-between text-xs">
+            <label class="flex items-center gap-2">
+              <i class="fa-solid fa-fill-drip w-3.5 text-[var(--text-secondary)]"></i>
+              <span>Background</span>
+            </label>
+            <input id="color-bg" type="color" value="#1a1a1a" class="w-9 h-6 p-0.5 bg-transparent border border-[var(--border)] cursor-pointer sharp">
+          </div>
+
+          <div class="flex items-center justify-between text-xs">
+            <label class="flex items-center gap-2">
+              <i class="fa-solid fa-link w-3.5 text-[var(--text-secondary)]"></i>
+              <span>Links</span>
+            </label>
+            <input id="color-link" type="color" value="#b0b0b0" class="w-9 h-6 p-0.5 bg-transparent border border-[var(--border)] cursor-pointer sharp">
+          </div>
+
+          <button id="reset-colors" class="text-xs flex items-center gap-1.5 text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors mt-1 sharp">
+            <i class="fa-solid fa-undo text-xs"></i>
+            <span>Reset Colors</span>
+          </button>
+
+        </div>
+      </details>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto border-t border-[var(--border)] bg-[var(--bg-secondary)]">
+
+      <div class="p-4 flex gap-2">
+
+        <button id="reset-btn" class="demo-button flex-1 py-2 text-xs uppercase tracking-wide flex items-center justify-center gap-2 hover:border-[var(--accent)] transition-colors sharp">
+          <i class="fa-solid fa-undo"></i>
+          <span>Reset All</span>
+        </button>
+
+        <button id="apply-all-btn" class="demo-button flex-1 py-2 text-xs uppercase tracking-wide flex items-center justify-center gap-2 sharp">
+          <i class="fa-solid fa-globe"></i>
+          <span>Apply Globally</span>
+        </button>
+
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- TOAST -->
+  <div id="toast-container" class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+    <div id="toast" class="px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--accent)] flex items-center gap-2 text-xs sharp">
+      <i id="toast-icon" class="fa-solid fa-check text-[var(--accent)]"></i>
+      <span id="toast-message"></span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+
+</body>
+</html>
